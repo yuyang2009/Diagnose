@@ -1,6 +1,6 @@
 package com.diagnose.diagnose.db.entity;
 
-import androidx.room.Entity;
+//import androidx.room.Entity;
 
 public class DiagResEntity {
 }

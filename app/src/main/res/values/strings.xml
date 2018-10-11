@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Diagnose</string>
+    <string name="title_home">主页</string>
+    <string name="title_diagnose">检测</string>
+    <string name="button_diagnose">开始检测</string>
+    <string name="temperature_unit">XX</string>
+
+    <string name="reset_button">复位</string>
+    <string name="start_button">启动</string>
+    <string name="pause_button">暂停</string>
+    <string name="camera_button">拍摄</string>
+    <string name="analysis_button">开始分析</string>
+
+    <string name="photo_des">荧光板照片</string>
+</resources>

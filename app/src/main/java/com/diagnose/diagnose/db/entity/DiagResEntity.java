@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.diagnose.diagnose.db.DateConverter;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "DiagResTable")
@@ -31,5 +32,10 @@ public class DiagResEntity {
     }
 
     public String getName() {return this.name;}
+
+    public String getDateFormatted(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd-hh:mm:ss");
+        return formatter.format(CreateAt);
+    }
 
 }

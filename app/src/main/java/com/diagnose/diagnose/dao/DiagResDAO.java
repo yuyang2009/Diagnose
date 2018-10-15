@@ -18,8 +18,8 @@ public interface DiagResDAO {
     @Query("DELETE FROM DiagResTable")
     void deleteAll();
 
-    @Query("SELECT * FROM DiagResTable WHERE id IN (:ids)")
-    List<DiagResEntity> loadAllByIds(int[] ids);
+    @Query("SELECT * FROM DiagResTable WHERE id = (:id)")
+    LiveData<DiagResEntity> loadAllById(int id);
 
     @Query("SELECT * FROM DiagResTable WHERe name LIKE :name LIMIT 1")
     DiagResEntity findByName(String name);

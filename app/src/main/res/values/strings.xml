@@ -1,23 +1,26 @@
 <resources>
-    <string name="app_name">Diagnose</string>
-    <string name="title_home">主页</string>
-    <string name="title_diagnose">检测</string>
-    <string name="button_diagnose">开始检测</string>
+    <string name="app_name">S.M.A.R.T.</string>
+    <string name="title_home">Home</string>
+    <string name="title_diagnose">Diagnose</string>
+    <string name="button_diagnose">start diagnose</string>
     <string name="temperature_unit">XX</string>
 
-    <string name="reset_button">复位</string>
-    <string name="start_button">启动</string>
-    <string name="pause_button">暂停</string>
-    <string name="camera_button">拍摄</string>
-    <string name="analysis_button">开始分析</string>
+    <string name="reset_button">reset</string>
+    <string name="start_button">start</string>
+    <string name="pause_button">pause</string>
+    <string name="camera_button">camera</string>
+    <string name="analysis_button">save</string>
 
-    <string name="photo_des">荧光板照片</string>
-    <string name="hint_DiagRes">检测结果...</string>
-    <string name="button_save">保存</string>
-    <string name="empty_not_saved">无法保存：检测结果为空！</string>
+    <string name="photo_des">chip photo</string>
+    <string name="hint_DiagRes">diagnose result...</string>
+    <string name="button_save">save</string>
+    <string name="empty_not_saved">could not be saved：diagnose result id empty!</string>
 
-    <string name="loading_diagres">加载检测结果...</string>
-    <string name="cd_diagres_list">检测结果列表</string>
-    <string name="cd_diagres_name">检测结果标题</string>
-    <string name="creat_at">创建于: %s</string>
+    <string name="loading_diagres">loading diagnose result...</string>
+    <string name="cd_diagres_list">diagnose result list</string>
+    <string name="cd_diagres_name">diagnose result title</string>
+    <string name="creat_at">Created at: %s</string>
+
+    <string name="title_hint">Title</string>
+    <string name="description_hint">edit the description of the diagnose result</string>
 </resources>

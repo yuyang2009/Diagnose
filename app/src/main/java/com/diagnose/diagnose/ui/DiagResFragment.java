@@ -29,7 +29,6 @@ public class DiagResFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate this data binding layout
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diagres, container, false);
-
         return mBinding.getRoot();
     }
 

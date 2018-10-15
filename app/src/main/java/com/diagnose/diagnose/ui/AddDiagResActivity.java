@@ -10,6 +10,6 @@ public class AddDiagResActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_diagres);
+        setContentView(R.layout.activity_adddiagres);
     }
 }

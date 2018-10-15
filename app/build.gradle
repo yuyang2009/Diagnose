@@ -4,8 +4,9 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.diagnose.diagnose"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
+        multiDexEnabled true // 导入外部包
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -49,5 +50,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version" // use kapt for Kotlin
 
-
+//    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.AnyChart:AnyChart-Android:1.0.5'
 }

@@ -16,7 +16,8 @@ public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
     private final DiagResDAO mDao;
 //    private final String basepath = Environment.getDataDirectory().getAbsolutePath();
 //    private final String targPath = pathCombine(basepath, "sampledata");
-    private final String basepath = Uri.parse("android.resource://com.diagnose.diagnose/res/raw").toString();
+//    private final String basepath = "file:///android_asset/";
+    public static final String uriPrefix = "sampledata/";
     private final String photoFileName = "photo.jpg";
     private final String tmpFileName = "tmp_test_data.dat";
     private final String resFileName = "res_test_data.dat";
@@ -31,16 +32,17 @@ public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         DiagResEntity diagResEntity = new DiagResEntity("Concentration test");
         diagResEntity.Description = "This is a sample of the diagnose result.";
 
-        diagResEntity.PhotoPath = pathCombine(basepath, photoFileName);
-        diagResEntity.TmpFilePath = pathCombine(basepath, tmpFileName);
-        diagResEntity.ResultsPath = pathCombine(basepath, resFileName);
+        diagResEntity.PhotoPath = pathCombine("file:///android_asset/sampledata/", photoFileName);
+        diagResEntity.TmpFilePath = pathCombine(uriPrefix, tmpFileName);
+        diagResEntity.ResultsPath = pathCombine(uriPrefix, resFileName);
         diagResEntity.CreateAt = new Date();
         mDao.insert(diagResEntity);
         return null;
     }
 
     private static String pathCombine(String path1, String path2) {
-        return new File(path1, path2).getPath();
+        return path1 + path2;
     }
+
 
 }

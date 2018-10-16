@@ -4,7 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.content.res.AssetManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,8 +20,10 @@ import com.diagnose.diagnose.R;
 import com.diagnose.diagnose.ViewModel.DiagResViewModel;
 import com.diagnose.diagnose.databinding.FragmentDiagresBinding;
 import com.diagnose.diagnose.db.entity.DiagResEntity;
+import com.diagnose.diagnose.db.PopulateDbAsync;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,6 +78,10 @@ public class DiagResFragment extends Fragment {
                 AnyChartView chart_res = root.findViewById(R.id.chart_res);
                 chart_res.setProgressBar(root.findViewById(R.id.pb_res));
                 chart_res.setChart(getResChart(diagres.ResultsPath));
+
+                AnyChartView chart_tmp = root.findViewById(R.id.chart_tmp);
+                chart_tmp.setProgressBar(root.findViewById(R.id.pb_tmp));
+                chart_tmp.setChart(getResChart(diagres.TmpFilePath));
             }
         });
     }
@@ -89,8 +95,33 @@ public class DiagResFragment extends Fragment {
         return fragment;
     }
 
+
+    public Cartesian getResChart(String path) {
+
+        Cartesian cartesian = AnyChart.line();
+
+        try {
+            String s = readFile2String(path);
+            cartesian.data(genTmpChart(s));
+            cartesian.legend().enabled(true);
+            cartesian.legend().fontSize(13d);
+            cartesian.legend().padding(0d, 0d, 10d, 0d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cartesian;
+    }
+
     public String readFile2String(String path) throws IOException {
-        InputStream is = new FileInputStream(path);
+        String uriPrefix = PopulateDbAsync.uriPrefix;
+        InputStream is;
+        if(path.startsWith(uriPrefix)) {
+            AssetManager am = this.getActivity().getAssets();
+            is = am.open(path);
+        } else {
+            is = new FileInputStream(new File(path));
+        }
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 
         String line = buf.readLine();
@@ -108,25 +139,8 @@ public class DiagResFragment extends Fragment {
         List<DataEntry> seriesData = new ArrayList<>();
         String[] vars = str.split(",");
         for(int i=0; i<vars.length; ++i) {
-            seriesData.add(new ValueDataEntry(i, Integer.parseInt(vars[i])));
+            seriesData.add(new ValueDataEntry(i, Integer.parseInt(vars[i].trim())));
         }
         return seriesData;
-    }
-
-    public Cartesian getResChart(String path) {
-
-        Cartesian cartesian = AnyChart.line();
-
-        try {
-            String s = readFile2String(path);
-            cartesian.data(genTmpChart(s));
-            cartesian.legend().enabled(true);
-            cartesian.legend().fontSize(13d);
-            cartesian.legend().padding(0d, 0d, 10d, 0d);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return cartesian;
     }
 }

@@ -31,8 +31,6 @@ public class DiagResDetailActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        AnyChartView chart_res = findViewById(R.id.chart_res);
-        chart_res.setProgressBar(findViewById(R.id.pb_res));
 
     }
 

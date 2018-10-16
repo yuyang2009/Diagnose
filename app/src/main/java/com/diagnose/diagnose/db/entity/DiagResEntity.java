@@ -59,45 +59,4 @@ public class DiagResEntity {
         return formatter.format(CreateAt);
     }
 
-    public String readFile2String(String path) throws IOException {
-        InputStream is = new FileInputStream(path);
-        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-
-        String line = buf.readLine();
-        StringBuffer sb = new StringBuffer();
-
-        while(line != null) {
-            sb.append(line).append("\n");
-            line = buf.readLine();
-        }
-        return sb.toString();
-    }
-
-    public List<DataEntry> genTmpChart(String str) {
-
-        List<DataEntry> seriesData = new ArrayList<>();
-        String[] vars = str.split(",");
-        for(int i=0; i<vars.length; ++i) {
-            seriesData.add(new ValueDataEntry(i, Integer.parseInt(vars[i])));
-        }
-        return seriesData;
-    }
-
-    public Cartesian getResChart() {
-
-        Cartesian cartesian = AnyChart.line();
-
-        try {
-            String s = readFile2String(TmpFilePath);
-            cartesian.data(genTmpChart(s));
-            cartesian.legend().enabled(true);
-            cartesian.legend().fontSize(13d);
-            cartesian.legend().padding(0d, 0d, 10d, 0d);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return cartesian;
-    }
-
 }

@@ -4,18 +4,29 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
 import com.diagnose.diagnose.R;
 import com.diagnose.diagnose.ViewModel.DiagResViewModel;
 import com.diagnose.diagnose.databinding.FragmentDiagresBinding;
 import com.diagnose.diagnose.db.entity.DiagResEntity;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiagResFragment extends Fragment {
@@ -35,6 +46,7 @@ public class DiagResFragment extends Fragment {
         return root;
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -47,14 +59,6 @@ public class DiagResFragment extends Fragment {
 
         mBinding.setDiagResViewModel(model);
 
-        View root = mBinding.getRoot();
-        DiagResEntity diagres = model.diagres.get();
-        DiagResEntity diagres = model.diagres.get();
-
-        AnyChartView chart_res = root.findViewById(R.id.chart_res);
-        chart_res.setProgressBar(root.findViewById(R.id.pb_res));
-        chart_res.setChart(diagres.getResChart());
-
         subscribeToModel(model);
     }
 
@@ -65,6 +69,13 @@ public class DiagResFragment extends Fragment {
             @Override
             public void onChanged(@Nullable DiagResEntity productEntity) {
                 model.setDiagRes(productEntity);
+                DiagResViewModel model = mBinding.getDiagResViewModel();
+                DiagResEntity diagres = model.getmObserverableDiagRes().getValue();
+
+                View root = mBinding.getRoot();
+                AnyChartView chart_res = root.findViewById(R.id.chart_res);
+                chart_res.setProgressBar(root.findViewById(R.id.pb_res));
+                chart_res.setChart(getResChart(diagres.ResultsPath));
             }
         });
     }
@@ -76,5 +87,46 @@ public class DiagResFragment extends Fragment {
         args.putInt(KEY_DIAGRESR_ID, diagresId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public String readFile2String(String path) throws IOException {
+        InputStream is = new FileInputStream(path);
+        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+
+        String line = buf.readLine();
+        StringBuffer sb = new StringBuffer();
+
+        while(line != null) {
+            sb.append(line).append("\n");
+            line = buf.readLine();
+        }
+        return sb.toString();
+    }
+
+    public List<DataEntry> genTmpChart(String str) {
+
+        List<DataEntry> seriesData = new ArrayList<>();
+        String[] vars = str.split(",");
+        for(int i=0; i<vars.length; ++i) {
+            seriesData.add(new ValueDataEntry(i, Integer.parseInt(vars[i])));
+        }
+        return seriesData;
+    }
+
+    public Cartesian getResChart(String path) {
+
+        Cartesian cartesian = AnyChart.line();
+
+        try {
+            String s = readFile2String(path);
+            cartesian.data(genTmpChart(s));
+            cartesian.legend().enabled(true);
+            cartesian.legend().fontSize(13d);
+            cartesian.legend().padding(0d, 0d, 10d, 0d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cartesian;
     }
 }

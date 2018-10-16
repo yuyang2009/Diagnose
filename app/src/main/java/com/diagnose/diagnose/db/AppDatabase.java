@@ -5,12 +5,11 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.diagnose.diagnose.AppExecutors;
 import com.diagnose.diagnose.dao.DiagResDAO;
 import com.diagnose.diagnose.db.entity.DiagResEntity;
+import com.diagnose.diagnose.db.PopulateDbAsync;
 
 import java.util.Date;
 
@@ -46,28 +45,28 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-
-        private final DiagResDAO mDao;
-
-        PopulateDbAsync(AppDatabase db) {
-            mDao = db.diagResDAO();
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            mDao.deleteAll();
-            DiagResEntity diagResEntity = new DiagResEntity("Hello test");
-            diagResEntity.Description = "test";
-            diagResEntity.CreateAt = new Date();
-            mDao.insert(diagResEntity);
-            diagResEntity = new DiagResEntity("World test");
-            diagResEntity.Description = "test";
-            diagResEntity.CreateAt = new Date();
-            mDao.insert(diagResEntity);
-            return null;
-        }
-    }
+//    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+//
+//        private final DiagResDAO mDao;
+//
+//        PopulateDbAsync(AppDatabase db) {
+//            mDao = db.diagResDAO();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(final Void... params) {
+//            mDao.deleteAll();
+//            DiagResEntity diagResEntity = new DiagResEntity("Hello test");
+//            diagResEntity.Description = "test";
+//            diagResEntity.CreateAt = new Date();
+//            mDao.insert(diagResEntity);
+//            diagResEntity = new DiagResEntity("World test");
+//            diagResEntity.Description = "test";
+//            diagResEntity.CreateAt = new Date();
+//            mDao.insert(diagResEntity);
+//            return null;
+//        }
+//    }
 
 
 }

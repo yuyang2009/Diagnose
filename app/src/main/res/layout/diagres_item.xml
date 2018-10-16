@@ -33,20 +33,24 @@
                 android:text="@{diagres.name}"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="5dp"
-                android:text="@{@string/creat_at(diagres.getDateFormatted())}"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp" />
-
-            <TextView
+                android:id="@+id/des"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:text="@{diagres.Description}"/>
+
+            <!--<TextView-->
+                <!--android:id="@+id/date"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/des"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginEnd="0dp"-->
+                <!--android:layout_marginRight="0dp"-->
+                <!--android:text="@{@string/creat_at(diagres.getDateFormatted())}"-->
+                <!--android:textAppearance="@style/TextAppearance.AppCompat.Body2" />-->
         </RelativeLayout>
 
 

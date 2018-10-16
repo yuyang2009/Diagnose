@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.anychart.AnyChartView;
 import com.diagnose.diagnose.R;
 import com.diagnose.diagnose.ViewModel.DiagResViewModel;
 import com.diagnose.diagnose.databinding.FragmentDiagresBinding;
@@ -29,9 +30,10 @@ public class DiagResFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate this data binding layout
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_diagres, container, false);
-        return mBinding.getRoot();
-    }
+        View root = mBinding.getRoot();
 
+        return root;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -44,6 +46,14 @@ public class DiagResFragment extends Fragment {
                 .get(DiagResViewModel.class);
 
         mBinding.setDiagResViewModel(model);
+
+        View root = mBinding.getRoot();
+        DiagResEntity diagres = model.diagres.get();
+        DiagResEntity diagres = model.diagres.get();
+
+        AnyChartView chart_res = root.findViewById(R.id.chart_res);
+        chart_res.setProgressBar(root.findViewById(R.id.pb_res));
+        chart_res.setChart(diagres.getResChart());
 
         subscribeToModel(model);
     }

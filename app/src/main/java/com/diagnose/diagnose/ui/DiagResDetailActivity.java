@@ -2,6 +2,7 @@ package com.diagnose.diagnose.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.anychart.AnyChartView;
@@ -15,8 +16,6 @@ public class DiagResDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_diagres_detail);
 
         Intent intent = getIntent();
-        AnyChartView anyChartView = findViewById(R.id.any_chart_view);
-        anyChartView.setProgressBar(findViewById(R.id.progress_bar));
 
         int diagresID = intent.getIntExtra(MainActivity.EXTRA_DiagRes_ID, 0);
 
@@ -25,6 +24,16 @@ public class DiagResDetailActivity extends AppCompatActivity {
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.contentFrame, fragment, null).commit();
+
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AnyChartView chart_res = findViewById(R.id.chart_res);
+        chart_res.setProgressBar(findViewById(R.id.pb_res));
+
+    }
+
 }

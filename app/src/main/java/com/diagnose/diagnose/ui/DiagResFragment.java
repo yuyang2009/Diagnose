@@ -2,25 +2,28 @@ package com.diagnose.diagnose.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
+import android.content.Context;
 import android.content.res.AssetManager;
+import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Cartesian;
 import com.diagnose.diagnose.R;
 import com.diagnose.diagnose.ViewModel.DiagResViewModel;
 import com.diagnose.diagnose.databinding.FragmentDiagresBinding;
-import com.diagnose.diagnose.db.entity.DiagResEntity;
 import com.diagnose.diagnose.db.PopulateDbAsync;
+import com.diagnose.diagnose.db.entity.DiagResEntity;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -75,13 +78,25 @@ public class DiagResFragment extends Fragment {
                 DiagResEntity diagres = model.getmObserverableDiagRes().getValue();
 
                 View root = mBinding.getRoot();
-                AnyChartView chart_res = root.findViewById(R.id.chart_res);
-                chart_res.setProgressBar(root.findViewById(R.id.pb_res));
-                chart_res.setChart(getResChart(diagres.ResultsPath));
 
-                AnyChartView chart_tmp = root.findViewById(R.id.chart_tmp);
-                chart_tmp.setProgressBar(root.findViewById(R.id.pb_tmp));
-                chart_tmp.setChart(getResChart(diagres.TmpFilePath));
+                Context context = getContext();
+
+                ImageView imageView = root.findViewById(R.id.photo_src);
+                Bitmap bitmap = getBitmapFromPath(context, diagres.PhotoPath);
+                imageView.setImageBitmap(bitmap);
+
+                LineDataSet dataSet_res = getResChart(context, diagres.ResultsPath);
+                dataSet_res.setLabel("Diagnose Result");
+                LineData lineData_res = new LineData(dataSet_res);
+                LineChart chart_res = root.findViewById(R.id.chart_res);
+                chart_res.setData(lineData_res);
+
+                LineChart chart_tmp = root.findViewById(R.id.chart_tmp);
+                LineDataSet dataSet_tmp = getTmpChart(context, diagres.TmpFilePath);
+                dataSet_tmp.setLabel("Temperature trend");
+                LineData lineData_tmp = new LineData(dataSet_tmp);
+                chart_tmp.setData(lineData_tmp);
+
             }
         });
     }
@@ -96,28 +111,46 @@ public class DiagResFragment extends Fragment {
     }
 
 
-    public Cartesian getResChart(String path) {
-
-        Cartesian cartesian = AnyChart.line();
-
+    public static LineDataSet getResChart(Context context, String path) {
+        List<Entry> entries = new ArrayList<Entry>();
         try {
-            String s = readFile2String(path);
-            cartesian.data(genTmpChart(s));
-            cartesian.legend().enabled(true);
-            cartesian.legend().fontSize(13d);
-            cartesian.legend().padding(0d, 0d, 10d, 0d);
+            String s = readFile2String(context, path);
+            String[] vars = s.split(",");
+            String[] xValues = {"0", "0.4", "0.5", "0.6", "0.7"};
+            for(int i=0; i<vars.length; ++i) {
+                entries.add(new Entry(Float.parseFloat(xValues[i].trim()),
+                                        Float.parseFloat(vars[i].trim())));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return cartesian;
+        LineDataSet lineDataSet = new LineDataSet(entries, "Label");
+        return lineDataSet;
     }
 
-    public String readFile2String(String path) throws IOException {
+    public static LineDataSet getTmpChart(Context context, String path) {
+        List<Entry> entries = new ArrayList<Entry>();
+        try {
+            String s = readFile2String(context, path);
+            String[] vars = s.split(",");
+            for(int i=0; i<vars.length; ++i) {
+                entries.add(new Entry(i, Float.parseFloat(vars[i].trim())));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        LineDataSet lineDataSet = new LineDataSet(entries, "Label");
+        return lineDataSet;
+    }
+
+
+    public static String readFile2String(Context context,String path) throws IOException {
         String uriPrefix = PopulateDbAsync.uriPrefix;
         InputStream is;
         if(path.startsWith(uriPrefix)) {
-            AssetManager am = this.getActivity().getAssets();
+            AssetManager am = context.getAssets();
             is = am.open(path);
         } else {
             is = new FileInputStream(new File(path));
@@ -134,13 +167,22 @@ public class DiagResFragment extends Fragment {
         return sb.toString();
     }
 
-    public List<DataEntry> genTmpChart(String str) {
+    public static Bitmap getBitmapFromPath(Context context, String path){
+        String uriPrefix = PopulateDbAsync.uriPrefix;
+        InputStream is = null;
+        try {
+            if(path.startsWith(uriPrefix)) {
+                AssetManager am = context.getAssets();
+                is = am.open(path);
+            } else {
+                is = new FileInputStream(new File(path));
+            }
 
-        List<DataEntry> seriesData = new ArrayList<>();
-        String[] vars = str.split(",");
-        for(int i=0; i<vars.length; ++i) {
-            seriesData.add(new ValueDataEntry(i, Integer.parseInt(vars[i].trim())));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return seriesData;
+        Bitmap bitmap = BitmapFactory.decodeStream(is);
+        return bitmap;
     }
+
 }

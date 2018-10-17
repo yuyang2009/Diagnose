@@ -1,14 +1,10 @@
 package com.diagnose.diagnose.db;
 
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
 
 import com.diagnose.diagnose.dao.DiagResDAO;
 import com.diagnose.diagnose.db.entity.DiagResEntity;
 
-import java.io.File;
 import java.util.Date;
 
 public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -32,7 +28,7 @@ public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         DiagResEntity diagResEntity = new DiagResEntity("Concentration test");
         diagResEntity.Description = "This is a sample of the diagnose result.";
 
-        diagResEntity.PhotoPath = pathCombine("file:///android_asset/sampledata/", photoFileName);
+        diagResEntity.PhotoPath = pathCombine(uriPrefix, photoFileName);
         diagResEntity.TmpFilePath = pathCombine(uriPrefix, tmpFileName);
         diagResEntity.ResultsPath = pathCombine(uriPrefix, resFileName);
         diagResEntity.CreateAt = new Date();

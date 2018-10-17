@@ -1,5 +1,7 @@
 package com.diagnose.diagnose.ui;
 
+import android.arch.persistence.room.util.StringUtil;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -15,13 +18,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.diagnose.diagnose.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DiagnoseActivity extends AppCompatActivity {
@@ -30,6 +37,10 @@ public class DiagnoseActivity extends AppCompatActivity {
     private long stopTime = 0;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String mCurrentPhotoPath, mTmpFilePath;
+    private List<String> tmpList;
+
+    public static final String EXTRA_PhotoPath = "PhotoPath";
+    public static final String EXTRA_TmpFilePath = "TmpFilePath";
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -65,6 +76,30 @@ public class DiagnoseActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_diagnose);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    public void saveBtnonClick(View view) {
+        if(mCurrentPhotoPath == null) {
+//            public void showEmptyTaskError() {
+//                Snackbar.make(mTitle, getString(R.string.empty_task_message), Snackbar.LENGTH_LONG).show();
+//            }
+            CharSequence text = "Please take a photo first!";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
+            return;
+        }
+
+        try {
+            createTemperatureFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(DiagnoseActivity.this, AddDiagResActivity.class);
+        intent.putExtra(EXTRA_PhotoPath, mCurrentPhotoPath);
+        intent.putExtra(EXTRA_TmpFilePath, mTmpFilePath);
+        startActivity(intent);
     }
 
     public void startBtnonClick(View view) {
@@ -133,18 +168,14 @@ public class DiagnoseActivity extends AppCompatActivity {
         return image;
     }
 
-    private File createTemperatureFile() throws IOException {
+    private String createTemperatureFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "tmp_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,
-                ".txt",
-                storageDir
-        );
-
-        mTmpFilePath = image.getAbsolutePath();
-        return image;
+        String tmpFileName = "tmp_" + timeStamp + "_";
+        FileOutputStream fos = openFileOutput(tmpFileName, Context.MODE_PRIVATE);
+        String tmpStr = tmpList.toString();
+        fos.write(tmpStr.getBytes());
+        fos.close();
+        return tmpFileName;
     }
 //    public void AnalysisBtnonClick(View view) {
 //        Intent newDiagRestIntent = new Intent(this, NewDiagResActivity.class);

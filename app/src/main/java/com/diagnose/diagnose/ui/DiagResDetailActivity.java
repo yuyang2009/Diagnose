@@ -2,10 +2,8 @@ package com.diagnose.diagnose.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.anychart.AnyChartView;
 import com.diagnose.diagnose.R;
 
 public class DiagResDetailActivity extends AppCompatActivity {

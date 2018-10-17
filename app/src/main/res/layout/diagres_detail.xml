@@ -7,18 +7,22 @@
             type="com.diagnose.diagnose.db.entity.DiagResEntity"/>
     </data>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginStart="@dimen/item_horizontal_margin"-->
+        <!--android:layout_marginEnd="@dimen/item_horizontal_margin"-->
+        <!--android:minHeight="@dimen/product_item_min_height"-->
+        <!--android:orientation="horizontal"-->
+        <!--app:cardUseCompatPadding="true">-->
+
+    <ScrollView
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/item_horizontal_margin"
-        android:layout_marginEnd="@dimen/item_horizontal_margin"
-        android:minHeight="@dimen/product_item_min_height"
-        android:orientation="horizontal"
-        app:cardUseCompatPadding="true">
+        android:layout_width="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_horizontal_margin"
             android:layout_marginEnd="@dimen/item_horizontal_margin">
 
@@ -26,9 +30,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="0dp"
                 android:layout_marginTop="@dimen/small_padding"
                 android:contentDescription="@string/cd_diagres_name"
                 android:text="@{diagres.name}"
@@ -38,68 +40,46 @@
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/name"
-                android:layout_alignParentEnd="true"
+                android:layout_below="@id/name"
                 android:layout_marginTop="@dimen/small_padding"
-                android:layout_marginEnd="0dp"
-                android:text="@{@string/creat_at(diagres.getDateFormatted())}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:text="@{@string/creat_at(diagres.getDateFormatted())}" />
 
             <TextView
                 android:id="@+id/desp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/date"
-                android:layout_alignParentEnd="true"
+                android:layout_below="@id/date"
                 android:layout_marginTop="@dimen/small_padding"
                 android:text="@{diagres.Description}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <ImageView
                 android:id="@+id/photo_src"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/desp"
-                android:minHeight="@dimen/small_padding"
-                android:layout_alignParentEnd="true"
+                android:layout_below="@id/desp"
                 android:layout_marginTop="@dimen/small_padding"
-                android:src="@{diagres.PhotoPath}"
-                android:switchTextAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:contentDescription="TODO" />
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/photo_des"
+                android:maxHeight="300dp" />
 
-            <com.anychart.AnyChartView
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_res"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:layout_below="@+id/photo_src"
-                android:minHeight="@dimen/small_padding"
-                android:layout_marginTop="@dimen/small_padding"/>
-
-            <ProgressBar
-                android:id="@+id/pb_res"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chart_res"
-                android:minHeight="@dimen/small_padding"
-                android:layout_alignParentStart="true" />
-
-            <com.anychart.AnyChartView
-                android:id="@+id/chart_tmp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chart_res"
-                android:minHeight="@dimen/small_padding"
                 android:layout_marginTop="@dimen/small_padding" />
 
-            <ProgressBar
-                android:id="@+id/pb_tmp"
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_tmp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chart_tmp"
+                android:layout_height="300dp"
+                android:layout_below="@id/chart_res"
+                android:layout_alignParentBottom="true"
                 android:layout_marginTop="@dimen/small_padding" />
 
         </RelativeLayout>
 
-
-    </android.support.v7.widget.CardView>
+    </ScrollView>
+    <!--</android.support.v7.widget.CardView>-->
 </layout>

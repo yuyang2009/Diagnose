@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface DiagResDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(DiagResEntity DiagRes);
+    void insert(DiagResEntity... diagResEntities);
 
     @Query("DELETE FROM DiagResTable")
     void deleteAll();

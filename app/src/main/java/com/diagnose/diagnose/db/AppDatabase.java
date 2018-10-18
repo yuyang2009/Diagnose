@@ -9,9 +9,6 @@ import android.support.annotation.NonNull;
 
 import com.diagnose.diagnose.dao.DiagResDAO;
 import com.diagnose.diagnose.db.entity.DiagResEntity;
-import com.diagnose.diagnose.db.PopulateDbAsync;
-
-import java.util.Date;
 
 @Database(entities = {DiagResEntity.class}, version=1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
@@ -44,29 +41,4 @@ public abstract class AppDatabase extends RoomDatabase {
             new PopulateDbAsync(INSTANCE).execute();
         }
     };
-
-//    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-//
-//        private final DiagResDAO mDao;
-//
-//        PopulateDbAsync(AppDatabase db) {
-//            mDao = db.diagResDAO();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(final Void... params) {
-//            mDao.deleteAll();
-//            DiagResEntity diagResEntity = new DiagResEntity("Hello test");
-//            diagResEntity.Description = "test";
-//            diagResEntity.CreateAt = new Date();
-//            mDao.insert(diagResEntity);
-//            diagResEntity = new DiagResEntity("World test");
-//            diagResEntity.Description = "test";
-//            diagResEntity.CreateAt = new Date();
-//            mDao.insert(diagResEntity);
-//            return null;
-//        }
-//    }
-
-
 }

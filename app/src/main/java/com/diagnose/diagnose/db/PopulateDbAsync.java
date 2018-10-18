@@ -14,9 +14,9 @@ public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 //    private final String targPath = pathCombine(basepath, "sampledata");
 //    private final String basepath = "file:///android_asset/";
     public static final String uriPrefix = "sampledata/";
-    private final String photoFileName = "photo.jpg";
-    private final String tmpFileName = "tmp_test_data.dat";
-    private final String resFileName = "res_test_data.dat";
+    public static final String photoFileName = "photo.jpg";
+    public static final String tmpFileName = "tmp_test_data.dat";
+    public static final String resFileName = "res_test_data.dat";
 
     PopulateDbAsync(AppDatabase db) {
         mDao = db.diagResDAO();
@@ -36,7 +36,7 @@ public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    private static String pathCombine(String path1, String path2) {
+    public static String pathCombine(String path1, String path2) {
         return path1 + path2;
     }
 

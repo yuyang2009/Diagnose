@@ -1,6 +1,5 @@
 package com.diagnose.diagnose.ui;
 
-import android.arch.persistence.room.util.StringUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,9 +9,9 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +25,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class DiagnoseActivity extends AppCompatActivity {
@@ -37,7 +36,7 @@ public class DiagnoseActivity extends AppCompatActivity {
     private long stopTime = 0;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String mCurrentPhotoPath, mTmpFilePath;
-    private List<String> tmpList;
+    private List<String> tmpList = new ArrayList<>();
 
     public static final String EXTRA_PhotoPath = "PhotoPath";
     public static final String EXTRA_TmpFilePath = "TmpFilePath";
@@ -90,9 +89,9 @@ public class DiagnoseActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-
+        this.pauseBtn.callOnClick();
         try {
-            createTemperatureFile();
+            mTmpFilePath = createTemperatureFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,6 +104,13 @@ public class DiagnoseActivity extends AppCompatActivity {
     public void startBtnonClick(View view) {
         chronometer.setBase(SystemClock.elapsedRealtime() + stopTime);
         chronometer.start();
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                long time =  SystemClock.elapsedRealtime() - chronometer.getBase();
+                tmpList.add(Long.toString(time / 1000));
+            }
+        });
         startBtn.setVisibility(View.INVISIBLE);
         pauseBtn.setVisibility(View.VISIBLE);
     }
@@ -170,12 +176,12 @@ public class DiagnoseActivity extends AppCompatActivity {
 
     private String createTemperatureFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String tmpFileName = "tmp_" + timeStamp + "_";
+        String tmpFileName = "tmp_" + timeStamp + ".dat";
         FileOutputStream fos = openFileOutput(tmpFileName, Context.MODE_PRIVATE);
-        String tmpStr = tmpList.toString();
+        String tmpStr = TextUtils.join(", ", tmpList);
         fos.write(tmpStr.getBytes());
         fos.close();
-        return tmpFileName;
+        return getFileStreamPath(tmpFileName).getAbsolutePath();
     }
 //    public void AnalysisBtnonClick(View view) {
 //        Intent newDiagRestIntent = new Intent(this, NewDiagResActivity.class);

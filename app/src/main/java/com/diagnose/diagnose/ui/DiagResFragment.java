@@ -1,5 +1,6 @@
 package com.diagnose.diagnose.ui;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.res.AssetManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 
 import com.diagnose.diagnose.R;
 import com.diagnose.diagnose.ViewModel.DiagResViewModel;
+import com.diagnose.diagnose.dao.DiagResDAO;
 import com.diagnose.diagnose.databinding.FragmentDiagresBinding;
 import com.diagnose.diagnose.db.PopulateDbAsync;
 import com.diagnose.diagnose.db.entity.DiagResEntity;
@@ -31,8 +34,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.diagnose.diagnose.db.PopulateDbAsync.pathCombine;
+import static com.diagnose.diagnose.db.PopulateDbAsync.resFileName;
+import static com.diagnose.diagnose.db.PopulateDbAsync.tmpFileName;
+import static com.diagnose.diagnose.db.PopulateDbAsync.uriPrefix;
 
 public class DiagResFragment extends Fragment {
 
@@ -186,3 +195,4 @@ public class DiagResFragment extends Fragment {
     }
 
 }
+

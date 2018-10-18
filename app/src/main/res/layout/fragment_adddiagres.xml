@@ -58,7 +58,7 @@
                 android:layout_marginTop="@dimen/small_padding" />
 
             <Button
-                android:id="@+id/oncilie"
+                android:id="@+id/confirmBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/chart_tmp"

@@ -36,7 +36,7 @@ public class DiagResEntity {
     public String getName() {return this.name;}
 
     public String getDateFormatted() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd-hh:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss");
         return formatter.format(CreateAt);
     }
 

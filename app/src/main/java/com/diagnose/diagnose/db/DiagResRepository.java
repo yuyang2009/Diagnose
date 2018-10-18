@@ -32,8 +32,10 @@ public class DiagResRepository {
         return  mDiagResDao.loadAllById(id);
     }
 
-    public void insert(DiagResEntity diagResEntity) {
-        new insertAsyncTask(mDiagResDao).execute(diagResEntity);
+    public Void insert(DiagResEntity... diagResEntities) {
+        insertAsyncTask task = new insertAsyncTask(mDiagResDao);
+        task.execute(diagResEntities);
+        return null;
     }
 
     private static class insertAsyncTask extends AsyncTask<DiagResEntity, Void, Void> {
@@ -45,7 +47,7 @@ public class DiagResRepository {
 
         @Override
         protected Void doInBackground(final DiagResEntity... params) {
-            mAsyncTaskDao.insert(params[0]);
+            mAsyncTaskDao.insert(params);
             return null;
         }
     }

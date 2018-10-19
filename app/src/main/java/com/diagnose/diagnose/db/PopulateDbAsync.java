@@ -24,15 +24,17 @@ public class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(final Void... params) {
-        mDao.deleteAll();
-        DiagResEntity diagResEntity = new DiagResEntity("Concentration test");
-        diagResEntity.Description = "This is a sample of the diagnose result.";
+//        mDao.deleteAll();
+        if(mDao.countDiagRes() == 0) {
+            DiagResEntity diagResEntity = new DiagResEntity("Concentration test");
+            diagResEntity.Description = "This is a sample of the diagnose result.";
 
-        diagResEntity.PhotoPath = pathCombine(uriPrefix, photoFileName);
-        diagResEntity.TmpFilePath = pathCombine(uriPrefix, tmpFileName);
-        diagResEntity.ResultsPath = pathCombine(uriPrefix, resFileName);
-        diagResEntity.CreateAt = new Date();
-        mDao.insert(diagResEntity);
+            diagResEntity.PhotoPath = pathCombine(uriPrefix, photoFileName);
+            diagResEntity.TmpFilePath = pathCombine(uriPrefix, tmpFileName);
+            diagResEntity.ResultsPath = pathCombine(uriPrefix, resFileName);
+            diagResEntity.CreateAt = new Date();
+            mDao.insert(diagResEntity);
+        }
         return null;
     }
 

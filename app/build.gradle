@@ -8,7 +8,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled true // 导入外部包
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

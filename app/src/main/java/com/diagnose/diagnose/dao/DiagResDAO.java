@@ -18,6 +18,9 @@ public interface DiagResDAO {
     @Query("DELETE FROM DiagResTable")
     void deleteAll();
 
+    @Query("SELECT COUNT(*) FROM diagrestable")
+    Integer countDiagRes();
+
     @Query("SELECT * FROM DiagResTable WHERE id = (:id)")
     LiveData<DiagResEntity> loadAllById(int id);
 
